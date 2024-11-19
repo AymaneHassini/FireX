@@ -74,6 +74,12 @@ jobs:
           cp fireX/.env.example fireX/.env
           php fireX/artisan key:generate
 
+      - name: Clear Config and Cache
+        working-directory: fireX
+        run: |
+          php artisan config:clear
+          php artisan cache:clear
+          
       # Running Laravel migrations
       - name: Run migrations
         run:  php fireX/artisan migrate --force
