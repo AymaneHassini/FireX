@@ -1,0 +1,87 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - SCRUM-62-initialize-the-ci-cd-pipeline
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:9.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: laravel_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      # Checking out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Setting up PHP environment for Laravel
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql
+          coverage: none
+          tools: composer
+
+      # Caching Composer dependencies
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      # Waiting for MySQL to be healthy
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..10}; do
+            if mysqladmin ping -h127.0.0.1 --silent; then
+              echo "MySQL is ready!";
+              break;
+            fi
+            echo "Waiting for MySQL to be ready...";
+            sleep 5;
+          done
+
+      # Installing dependencies
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      # Setting up .env file and application key
+      - name: Set up environment file
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      # Running Laravel migrations
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      # Running Laravel tests
+      - name: Run tests
+        run: php artisan test
+
+      # Cleanup
+      - name: Clean up dependencies
+        run: |
+          composer clear-cache
