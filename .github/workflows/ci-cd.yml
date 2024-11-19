@@ -49,6 +49,7 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+        working-directory: ./fireX
 
       # Waiting for MySQL to be healthy
       - name: Wait for MySQL to be ready
