@@ -73,11 +73,10 @@ jobs:
         run: |
           php artisan config:clear
           php artisan cache:clear
-          
+
       # Setting up .env file and application key
       - name: Set up environment file
         run: |
-          cp fireX/.env.example fireX/.env
           php fireX/artisan key:generate
 
 
