@@ -79,6 +79,17 @@ jobs:
         run: |
           php fireX/artisan key:generate
 
+      - name: Run Migrations
+        working-directory: fireX
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: laravel_db
+          DB_USERNAME: root
+          DB_PASSWORD: rootpassword
+        run: php artisan migrate --force
+
 
       # Running Laravel migrations
       - name: Run migrations
