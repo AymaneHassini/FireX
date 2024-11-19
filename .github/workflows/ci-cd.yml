@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-      - feature/*  # This will trigger for any feature branch
+      - feature/SCRUM-62-initialize-the-ci-cd-pipeline
+
   pull_request:
     branches:
       - main
@@ -15,7 +16,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:9.0 # Keeping MySQL version as per your local setup
+        image: mysql:9.0
         env:
           MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: laravel_db
@@ -28,59 +29,64 @@ jobs:
           --health-retries=3
 
     steps:
-      # Checkout the code from the repository
+      # Checking out the code from the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      # Set up PHP environment for Laravel (PHP 8.3)
-      - name: Set up PHP with Composer
+      # Setting up PHP environment for Laravel
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: pdo_mysql, mbstring, exif, bcmath
+          extensions: pdo_mysql
+          coverage: none
           tools: composer
 
-      # Cache Composer dependencies to speed up future builds
+      # Caching Composer dependencies
       - name: Cache Composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v2
         with:
           path: ~/.composer/cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('fireX/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      # Wait for MySQL to be ready
+      # Waiting for MySQL to be healthy
       - name: Wait for MySQL to be ready
         run: |
           for i in {1..10}; do
             if mysqladmin ping -h127.0.0.1 --silent; then
-              echo "MySQL is ready!"
-              break
+              echo "MySQL is ready!";
+              break;
             fi
-            echo "Waiting for MySQL..."
-            sleep 5
+            echo "Waiting for MySQL to be ready...";
+            sleep 5;
           done
 
-      # Install Composer dependencies
+      # Installing dependencies in the 'fireX' directory
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
-        working-directory: ./
-      
+        working-directory: ./fireX  # Adjusted for the 'fireX' folder
 
-      # Set up .env file from example and generate the application key
+      # Setting up environment file
       - name: Set up environment file
         run: |
-          cp .env.example .env
+          cp fireX/.env.example fireX/.env  
           php artisan key:generate
+        working-directory: ./fireX  # Adjusted for the 'fireX' folder
 
-      # Run Laravel migrations
+      # Running Laravel migrations
       - name: Run migrations
         run: php artisan migrate --force
+        working-directory: ./fireX  # Adjusted for the 'fireX' folder
 
-      # Run Laravel tests
+      # Running Laravel tests
       - name: Run tests
         run: php artisan test
+        working-directory: ./fireX  # Adjusted for the 'fireX' folder
 
-      # Clean up Composer cache to save space
+      # Cleanup
       - name: Clean up dependencies
-        run: composer clear-cache
+        run: |
+          composer clear-cache
+        working-directory: ./fireX  # Adjusted for the 'fireX' folder
