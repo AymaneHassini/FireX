@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - feature/SCRUM-62-initialize-the-ci-cd-pipeline
+
   pull_request:
     branches:
       - main
