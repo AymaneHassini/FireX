@@ -57,11 +57,8 @@ jobs:
       - name: Ensure .env file exists
         run: |
         
-          if [ ! -f fireX/.env ]; then
             cp fireX/.env.example fireX/.env
-            exit 1;
-          fi
-          echo ".env file found."
+     
 
       # Set Laravel app environment
       - name: Set environment variables
