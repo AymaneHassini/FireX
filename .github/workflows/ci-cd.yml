@@ -56,8 +56,9 @@ jobs:
       # Verify existence of .env file
       - name: Ensure .env file exists
         run: |
+        
           if [ ! -f fireX/.env ]; then
-            echo ".env file does not exist in fireX directory.";
+            cp fireX/.env.example fireX/.env
             exit 1;
           fi
           echo ".env file found."
