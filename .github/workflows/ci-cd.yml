@@ -16,7 +16,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:9.0
+        image: mysql:8.0  # Corrected to a stable MySQL version
         env:
           MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: laravel_db
@@ -65,28 +65,28 @@ jobs:
 
       # Installing dependencies in the 'fireX' directory
       - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-        working-directory: ./fireX  # Adjusted for the 'fireX' folder
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+        working-directory: ./fireX
 
       # Setting up environment file
       - name: Set up environment file
         run: |
           cp fireX/.env.example fireX/.env  
           php artisan key:generate
-        working-directory: ./fireX  # Adjusted for the 'fireX' folder
+        working-directory: ./fireX
 
       # Running Laravel migrations
       - name: Run migrations
         run: php artisan migrate --force
-        working-directory: ./fireX  # Adjusted for the 'fireX' folder
+        working-directory: ./fireX
 
       # Running Laravel tests
       - name: Run tests
         run: php artisan test
-        working-directory: ./fireX  # Adjusted for the 'fireX' folder
+        working-directory: ./fireX
 
       # Cleanup
       - name: Clean up dependencies
         run: |
           composer clear-cache
-        working-directory: ./fireX  # Adjusted for the 'fireX' folder
+        working-directory: ./fireX
