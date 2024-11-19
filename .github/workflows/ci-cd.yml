@@ -66,6 +66,7 @@ jobs:
       # Installing dependencies
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        working-directory: ./fireX
 
       # Setting up .env file and application key
       - name: Set up environment file
