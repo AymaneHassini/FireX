@@ -68,11 +68,11 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
         working-directory: ./fireX
 
-      # Setting up .env file and application key
       - name: Set up environment file
         run: |
-          cp .env.example .env
+          cp fireX/.env.example fireX/.env  
           php artisan key:generate
+  working-directory: fireX
 
       # Running Laravel migrations
       - name: Run migrations
