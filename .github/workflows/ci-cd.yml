@@ -71,8 +71,8 @@ jobs:
       # Setting up .env file and application key
       - name: Set up environment file
         run: |
-          cp .env.example .env
-          php artisan key:generate
+          cp fireX/.env.example fireX/.env
+          php fireX/artisan key:generate
 
       # Running Laravel migrations
       - name: Run migrations
