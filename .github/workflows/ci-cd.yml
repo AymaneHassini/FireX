@@ -7,8 +7,6 @@ on:
   pull_request:
     branches:
       - main
-      - feature/SCRUM-62-initialize-the-ci-cd-pipeline
-
 
 jobs:
   build:
@@ -16,7 +14,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:9.0
         env:
           MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: laravel_db
@@ -47,7 +45,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.composer/cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('fireX/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
@@ -63,25 +61,29 @@ jobs:
             sleep 5;
           done
 
-      # Installing dependencies
+      # Installing dependencies in the 'fireX' directory
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        working-directory: ./fireX
 
       # Setting up .env file and application key
       - name: Set up environment file
         run: |
           cp .env.example .env
           php artisan key:generate
+        working-directory: ./fireX
 
       # Running Laravel migrations
       - name: Run migrations
         run: php artisan migrate --force
+        working-directory: ./fireX
 
       # Running Laravel tests
       - name: Run tests
         run: php artisan test
+        working-directory: ./fireX
 
       # Cleanup
       - name: Clean up dependencies
-        run: |
-          composer clear-cache
+        run: composer clear-cache
+        working-directory: ./fireX
