@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - main
-      - feature/SCRUM-62-initialize-the-ci-cd-pipeline
-
+      -feature/SCRUM-62-initialize-the-ci-cd-pipeline
   pull_request:
     branches:
       - main
@@ -29,11 +28,11 @@ jobs:
           --health-retries=3
 
     steps:
-      # Checking out the code from the repository
+      # Checkout repository code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Setting up PHP environment for Laravel
+      # Set up PHP environment
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -41,33 +40,39 @@ jobs:
           extensions: pdo_mysql
           tools: composer
 
-      # Caching Composer dependencies
-      - name: Cache Composer dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.composer/cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+      # Debug directory structure
+      - name: Verify file paths
+        run: |
+          echo "Listing root directory:"
+          ls -la
+          echo "Listing fireX directory:"
+          ls -la fireX/
 
-      # Debugging file structure
-      - name: Debug file paths
-        run: ls -la fireX/
-
-      # Installing dependencies
-      - name: Install dependencies
+      # Install dependencies
+      - name: Install Composer dependencies
         working-directory: fireX
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      # Setting up the .env file and generating the application key
-      - name: Set up environment file
+      # Verify existence of .env file
+      - name: Ensure .env file exists
+        run: |
+          if [ ! -f fireX/.env ]; then
+            echo ".env file does not exist in fireX directory.";
+            exit 1;
+          fi
+          echo ".env file found."
+
+      # Set Laravel app environment
+      - name: Set environment variables
         working-directory: fireX
+        env:
+          APP_ENV: local
         run: |
           php artisan config:clear
           php artisan cache:clear
           php artisan key:generate
 
-      # Running Laravel migrations
+      # Run database migrations
       - name: Run migrations
         working-directory: fireX
         env:
@@ -79,11 +84,7 @@ jobs:
           DB_PASSWORD: rootpassword
         run: php artisan migrate --force
 
-      # Running Laravel tests
+      # Run application tests
       - name: Run tests
         working-directory: fireX
         run: php artisan test
-
-      # Cleanup Composer cache
-      - name: Clean up dependencies
-        run: composer clear-cache
