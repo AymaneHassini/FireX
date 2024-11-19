@@ -40,45 +40,50 @@ jobs:
           extensions: pdo_mysql
           tools: composer
 
-      # Debug directory structure
-      - name: Verify file paths
-        run: |
-          echo "Listing root directory:"
-          ls -la
-          echo "Listing fireX directory:"
-          ls -la fireX/
+      
 
       # Install dependencies
       - name: Install Composer dependencies
         working-directory: fireX
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      # Verify existence of .env file
-      - name: Ensure .env file exists
-        run: |
         
-            cp fireX/.env.example fireX/.env
-     
+       # Caching Composer dependencies
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
-      # Set Laravel app environment
-      - name: Set environment variables
-        working-directory: fireX
-        env:
-          APP_ENV: local
+        # Waiting for MySQL to be healthy
+      - name: Wait for MySQL to be ready
         run: |
+          for i in {1..10}; do
+            if mysqladmin ping -h127.0.0.1 --silent; then
+              echo "MySQL is ready!";
+              break;
+            fi
+            echo "Waiting for MySQL to be ready...";
+            sleep 5;
+          done
+
+     - name: Set up environment file
+       working-directory: fireX
+
+       run: |
+          cp .env.example .env
           php artisan config:clear
           php artisan cache:clear
           php artisan key:generate
+     
 
-      # Run database migrations
+   
+
+      # Running Laravel migrations
       - name: Run migrations
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel_db
-          DB_USERNAME: root
-          DB_PASSWORD: rootpassword
+        working-directory: fireX
+
         run: php artisan migrate --force
 
       # Run application tests
