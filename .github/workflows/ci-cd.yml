@@ -64,6 +64,8 @@ jobs:
       # Install Composer dependencies
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
+        working-directory: ./
+      
 
       # Set up .env file from example and generate the application key
       - name: Set up environment file
