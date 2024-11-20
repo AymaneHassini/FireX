@@ -80,11 +80,13 @@ jobs:
       # Run Artisan Commands
       - name: Run Artisan Commands
         run: |
-          # Ensure we are in the correct directory
-          cd fireX
-          # Run the Laravel Artisan migrate and test commands on the app container
-          echo "Running Artisan commands on container $APP_CONTAINER..."
+          # Fetch the container IDs (use this for debugging)
+          APP_CONTAINER=$(docker-compose ps -q web)
+          DB_CONTAINER=$(docker-compose ps -q db)
 
-          # Run the Laravel migration and tests using the dynamically obtained container name
-          docker exec "$APP_CONTAINER" sh -c "php artisan config:clear"
+          echo "App container: $APP_CONTAINER"
+          echo "DB container: $DB_CONTAINER"
+
+          # Run the Laravel Artisan commands on the app container
           docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
+          docker exec "$APP_CONTAINER" sh -c "php artisan test
