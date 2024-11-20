@@ -50,8 +50,6 @@ jobs:
             sleep 5;
           done
 
-    
-
       # Get the container IDs dynamically using docker compose ps
       - name: Get container IDs dynamically
         run: |
@@ -63,13 +61,13 @@ jobs:
           echo "App Container ID: $APP_CONTAINER"
 
         # Run Laravel Artisan commands using the dynamically obtained container names
-        - name: Run Artisan Commands
-          run: |
-            cd fireX  # Ensure we are in the right directory
-            # Check if the container ID is being correctly set
-            echo "Running Artisan commands on container $APP_CONTAINER..."
-            docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
-            docker exec "$APP_CONTAINER" sh -c "php artisan test"
+      - name: Run Artisan Commands
+        run: |
+          cd fireX  # Ensure we are in the right directory
+          # Check if the container ID is being correctly set
+          echo "Running Artisan commands on container $APP_CONTAINER..."
+          docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
+          docker exec "$APP_CONTAINER" sh -c "php artisan test"
 
 
 
