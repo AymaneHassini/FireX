@@ -90,12 +90,7 @@ jobs:
           echo $DB_USERNAME
           echo $DB_PASSWORD
 
-          echo "App container: $APP_CONTAINER"
-          echo "DB container: $DB_CONTAINER"
-          until docker exec "$DB_CONTAINER" mysqladmin --user=root --password=$DB_PASSWORD --host=localhost --silent; do
-              echo "Waiting for MySQL to be ready..."
-              sleep 3
-          done
+       
           # Run the Laravel Artisan commands on the app container
           docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
           docker exec "$APP_CONTAINER" sh -c "php artisan test"
