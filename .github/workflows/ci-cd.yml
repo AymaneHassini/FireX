@@ -51,7 +51,8 @@ jobs:
           done
       - name: Get container names dynamically
         run: |
-          # Get the container ID for the 'db' and 'app' services
+          cd fireX  # Ensure we are in the right directory
+          # Get the container ID for the 'db' and 'app' services using 'docker compose'
           DB_CONTAINER=$(docker compose ps -q db)
           APP_CONTAINER=$(docker compose ps -q app)
           echo "DB Container ID: $DB_CONTAINER"
@@ -60,5 +61,6 @@ jobs:
       # Run Laravel Artisan commands using the dynamically obtained container names
       - name: Run Artisan Commands
         run: |
+          cd fireX  # Ensure we are in the right directory
           docker exec $APP_CONTAINER php artisan migrate --force
           docker exec $APP_CONTAINER php artisan test
