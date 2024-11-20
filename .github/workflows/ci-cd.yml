@@ -4,10 +4,7 @@ on:
   push:
     branches:
       - main
-      - feature/SCRUM-62-initialize-the-ci-cd-pipeline
-  pull_request:
-    branches:
-      - main
+      - feature/*
 
 jobs:
   build:
@@ -15,12 +12,12 @@ jobs:
 
     services:
       mysql:
-        image: mysql:9.0
+        image: mysql:8.0
         env:
-
-          MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  
-          MYSQL_PASSWORD: ${DB_PASSWORD}  
-          MYSQL_DATABASE: ${DB_DATABASE}
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root
         ports:
           - 3306:3306
         options: >-
@@ -30,51 +27,30 @@ jobs:
           --health-retries=3
 
     steps:
-      # Checkout repository code
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      # Set up PHP environment
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: pdo_mysql
-          tools: composer
+      # Set up Docker Compose
+      - name: Set up Docker Compose
+        run: |
+          cd fireX
+          docker-compose up -d --build
 
-      # Install dependencies
-      - name: Install Composer dependencies
-        working-directory: fireX
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-        
- 
-      # Waiting for MySQL to be healthy
-      - name: Wait for MySQL to be ready
+      # Wait for MySQL to be ready
+      - name: Wait for MySQL
         run: |
           for i in {1..10}; do
-            if mysqladmin ping -h127.0.0.1 --silent; then
+            if docker exec firex-db mysqladmin ping -h"db" --silent; then
               echo "MySQL is ready!";
               break;
             fi
-            echo "Waiting for MySQL to be ready...";
+            echo "Waiting for MySQL...";
             sleep 5;
           done
 
-      # Set up environment file
-      - name: Set up environment file
-        working-directory: fireX
+      # Run Laravel Artisan commands
+      - name: Run Artisan Commands
         run: |
-          cp .env.example .env
-          php artisan config:clear
-          php artisan cache:clear
-          php artisan key:generate
-      - name: Run migrations
-        working-directory: fireX
-        run: php artisan migrate --force
-
-    
-
-      # Run application tests
-      - name: Run tests
-        working-directory: fireX
-        run: php artisan test
+          docker exec firex-app php artisan migrate --force
+          docker exec firex-app php artisan test
