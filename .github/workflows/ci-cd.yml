@@ -47,15 +47,7 @@ jobs:
         working-directory: fireX
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
         
-      # Caching Composer dependencies
-      - name: Cache Composer dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.composer/cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
+ 
       # Waiting for MySQL to be healthy
       - name: Wait for MySQL to be ready
         run: |
