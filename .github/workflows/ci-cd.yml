@@ -56,9 +56,10 @@ jobs:
           cd fireX  # Ensure we are in the right directory
           # Get the container ID for the 'db' and 'web' services using 'docker compose'
           DB_CONTAINER=$(docker compose ps -q db)  # MySQL container
-          APP_CONTAINER=$(docker compose ps -q firex-web)  # App container
+          APP_CONTAINER=$(docker compose ps -q web)  # Corrected App container service
           echo "DB Container ID: $DB_CONTAINER"
           echo "App Container ID: $APP_CONTAINER"
+
 
         # Run Laravel Artisan commands using the dynamically obtained container names
       - name: Run Artisan Commands
