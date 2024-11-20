@@ -82,7 +82,6 @@ jobs:
         run: |
           # Ensure we are in the correct directory
           cd fireX
-
           # Run the Laravel Artisan migrate and test commands on the app container
           echo "Running Artisan commands on container $APP_CONTAINER..."
 
