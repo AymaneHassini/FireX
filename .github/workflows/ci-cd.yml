@@ -52,8 +52,8 @@ jobs:
       - name: Get container names dynamically
         run: |
           # Get the container ID for the 'db' and 'app' services
-          DB_CONTAINER=$(docker-compose ps -q db)
-          APP_CONTAINER=$(docker-compose ps -q app)
+          DB_CONTAINER=$(docker compose ps -q db)
+          APP_CONTAINER=$(docker compose ps -q app)
           echo "DB Container ID: $DB_CONTAINER"
           echo "App Container ID: $APP_CONTAINER"
 
