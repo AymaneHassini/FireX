@@ -19,7 +19,7 @@ jobs:
           MYSQL_USER: ${DB_USERNAME}  
           MYSQL_PASSWORD: ${DB_PASSWORD}
         ports:
-          - 3307:3306
+          - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
@@ -86,5 +86,5 @@ jobs:
           echo "Running Artisan commands on container $APP_CONTAINER..."
 
           # Run the Laravel migration and tests using the dynamically obtained container name
-          docker exec firex-web-1 sh -c "php artisan migrate --force"
-          docker exec firex-web-1 sh -c "php artisan test"
+          docker exec "$APP_CONTAINER" sh -c "php artisan config:clear"
+          docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
