@@ -78,7 +78,7 @@ jobs:
       # Running Laravel migrations
       - name: Run migrations
         working-directory: fireX
-        run: php artisan migrate --force
+        run: php artisan migrate 
 
       # Run application tests
       - name: Run tests
