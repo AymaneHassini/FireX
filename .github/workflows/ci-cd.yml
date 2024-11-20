@@ -76,15 +76,21 @@ jobs:
           # Install Laravel dependencies inside the 'web' container (app container)
           echo "Installing Composer dependencies inside the app container ($APP_CONTAINER)..."
           docker exec "$APP_CONTAINER" sh -c "composer install --no-interaction"
-     
+      - name: Wait for MySQL
+        run: |
+          for i in {1..10}; do
+            if docker exec firex-db-1 mysqladmin ping -h"db" --silent; then
+              echo "MySQL is ready!";
+              break;
+            fi
+            echo "Waiting for MySQL...";
+            sleep 5;
+          done
+
       # Run Artisan Commands
       - name: Run Artisan Commands
         run: |
-          # Ensure we are in the correct directory
           cd fireX
-          # Run the Laravel Artisan migrate and test commands on the app container
           echo "Running Artisan commands on container $APP_CONTAINER..."
-
-          # Run the Laravel migration and tests using the dynamically obtained container name
-          docker exec firex-web-1 sh -c "php artisan migrate --force"
-          docker exec firex-web-1 sh -c "php artisan test"
+          docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
+          docker exec "$APP_CONTAINER" sh -c "php artisan test"
