@@ -62,6 +62,11 @@ jobs:
       # Run Laravel Artisan commands using the dynamically obtained container names
       - name: Run Artisan Commands
         run: |
-          cd fireX  # Ensure we are in the right directory
-          docker exec $APP_CONTAINER php artisan migrate --force
-          docker exec $APP_CONTAINER php artisan test
+           cd fireX  # Ensure we are in the right directory
+         # Check if the container ID is being correctly set
+           echo "Running Artisan commands on $APP_CONTAINER container..."
+    
+         # Ensure the correct container is used for Artisan commands
+           docker exec -T $APP_CONTAINER php artisan migrate --force
+           docker exec -T $APP_CONTAINER php artisan test
+ 
