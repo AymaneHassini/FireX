@@ -60,19 +60,18 @@ jobs:
           echo "DB Container ID: $DB_CONTAINER"
           echo "App Container ID: $APP_CONTAINER"
 
-        # Check if the container ID is being correctly set
-        - name: Debug container ID
-          run: |
-            echo "Debugging container ID..."
-            echo "App Container ID: $APP_CONTAINER"
-            docker ps -f "id=$APP_CONTAINER"
-
-        # Run Laravel Artisan commands using the dynamically obtained container names
-        - name: Run Artisan Commands
-          run: |
-            cd fireX  # Ensure we are in the right directory
-            echo "Running Artisan commands on container $APP_CONTAINER..."
-            docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
-            docker exec "$APP_CONTAINER" sh -c "php artisan test"
+      # Check if the container ID is being correctly set
+      - name: Debug container ID
+        run: |
+          echo "Debugging container ID..."
+          echo "App Container ID: $APP_CONTAINER"
+          docker ps -f "id=$APP_CONTAINER"
+      # Run Laravel Artisan commands using the dynamically obtained container names
+      - name: Run Artisan Commands
+        run: |
+          cd fireX  # Ensure we are in the right directory
+          echo "Running Artisan commands on container $APP_CONTAINER..."
+          docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
+          docker exec "$APP_CONTAINER" sh -c "php artisan test"
 
 
