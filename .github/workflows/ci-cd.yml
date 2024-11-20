@@ -81,8 +81,8 @@ jobs:
       - name: Run Artisan Commands
         run: |
           # Fetch the container IDs (use this for debugging)
-          APP_CONTAINER=$(docker-compose ps -q web)
-          DB_CONTAINER=$(docker-compose ps -q db)
+          APP_CONTAINER=$(docker compose ps -q web)
+          DB_CONTAINER=$(docker compose ps -q db)
 
           echo "App container: $APP_CONTAINER"
           echo "DB container: $DB_CONTAINER"
