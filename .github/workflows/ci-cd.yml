@@ -57,8 +57,8 @@ jobs:
           cd fireX  # Ensure we are in the correct directory
 
           # Get the container ID for the 'db' and 'web' services using 'docker-compose ps'
-          DB_CONTAINER=$(docker compose ps -q db)  # MySQL container
-          APP_CONTAINER=$(docker compose ps -q web)  # App container
+          DB_CONTAINER=$(docker-compose ps -q db)  # MySQL container
+          APP_CONTAINER=$(docker-compose ps -q web)  # App container
 
           # Output the container IDs for verification
           echo "DB Container ID: $DB_CONTAINER"
@@ -67,8 +67,17 @@ jobs:
           # Store the container IDs as environment variables for later steps
           echo "DB_CONTAINER=$DB_CONTAINER" >> $GITHUB_ENV
           echo "APP_CONTAINER=$APP_CONTAINER" >> $GITHUB_ENV
-        
-        # Run Laravel Artisan commands using the dynamically obtained container names
+      # Install Composer dependencies inside the container
+      - name: Install Composer dependencies inside the container
+        run: |
+          # Ensure we are in the correct directory
+          cd fireX  # Navigate to the directory containing the Docker Compose file
+
+          # Install Laravel dependencies inside the 'web' container (app container)
+          echo "Installing Composer dependencies inside the app container ($APP_CONTAINER)..."
+          docker exec "$APP_CONTAINER" sh -c "composer install --no-interaction"
+     
+      # Run Artisan Commands
       - name: Run Artisan Commands
         run: |
           # Ensure we are in the correct directory
@@ -80,8 +89,3 @@ jobs:
           # Run the Laravel migration and tests using the dynamically obtained container name
           docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
           docker exec "$APP_CONTAINER" sh -c "php artisan test"
-
-
-
-
-
