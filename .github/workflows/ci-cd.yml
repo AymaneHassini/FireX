@@ -17,7 +17,7 @@ jobs:
       mysql:
         image: mysql:9.0
         env:
-          
+
           MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  
           MYSQL_PASSWORD: ${DB_PASSWORD}  
           MYSQL_DATABASE: ${DB_DATABASE}
@@ -77,10 +77,7 @@ jobs:
           php artisan cache:clear
           php artisan key:generate
 
-      # Running Laravel migrations
-      - name: Run migrations
-        working-directory: fireX
-        run: php artisan migrate 
+    
 
       # Run application tests
       - name: Run tests
