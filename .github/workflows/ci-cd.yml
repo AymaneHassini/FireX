@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Copy .env.example to .env
-        run: cp .env.example fireX/.env
+        run: cp fireX/.env.example fireX/.env
 
       # Set up Docker Compose
       - name: Set up Docker Compose
