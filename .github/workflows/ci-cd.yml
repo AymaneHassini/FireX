@@ -10,19 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_DATABASE: ${{ secrets.DB_DATABASE }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-
     services:
       mysql:
         image: mysql:9.0
         env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.DB_DATABASE }}
-          MYSQL_USER: ${{ secrets.DB_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  
+          MYSQL_DATABASE: ${DB_DATABASE}
+          MYSQL_USER: ${DB_USERNAME}  
+          MYSQL_PASSWORD: ${DB_PASSWORD}
         ports:
           - 3306:3306
         options: >-
@@ -30,22 +25,16 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-
     steps:
       # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Copy .env file if it doesn't exist
-      - name: Copy .env file
-        run: cp fireX/.env.example fireX/.env
-
       # Set up Docker Compose
       - name: Set up Docker Compose
         run: |
-          cd fireX
+          cd ../fireX 
           docker compose up -d --build
-
       # Wait for MySQL to be ready
       - name: Wait for MySQL
         run: |
@@ -57,7 +46,6 @@ jobs:
             echo "Waiting for MySQL...";
             sleep 5;
           done
-
       # Run Laravel Artisan commands
       - name: Run Artisan Commands
         run: |

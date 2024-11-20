@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   web:
@@ -7,7 +6,7 @@ services:
       target: web
       context: .
     env_file:
-      - .env  # Ensures .env is loaded for this service
+      - .env
     ports:
       - "8000:80"
     volumes:
@@ -19,16 +18,17 @@ services:
     platform: "linux/amd64"
     image: mysql:9.0
     env_file:
-      - .env  # Ensure .env is loaded for the MySQL service
+      - .env
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}  
       MYSQL_PASSWORD: ${DB_PASSWORD}  
+      
     ports:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
 
 volumes:
-  dbdata:/
+  dbdata:
