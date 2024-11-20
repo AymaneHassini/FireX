@@ -49,12 +49,13 @@ jobs:
             echo "Waiting for MySQL...";
             sleep 5;
           done
-      - name: Get container names dynamically
+      # Get the container IDs dynamically using docker compose ps
+      - name: Get container IDs dynamically
         run: |
           cd fireX  # Ensure we are in the right directory
-          # Get the container ID for the 'db' and 'app' services using 'docker compose'
-          DB_CONTAINER=$(docker compose ps -q db)
-          APP_CONTAINER=$(docker compose ps -q app)
+          # Get the container ID for the 'db' and 'web' services using 'docker compose'
+          DB_CONTAINER=$(docker compose ps -q db)  # Use 'db' for the MySQL service
+          APP_CONTAINER=$(docker compose ps -q web)  # Use 'web' for the app service
           echo "DB Container ID: $DB_CONTAINER"
           echo "App Container ID: $APP_CONTAINER"
 
