@@ -68,7 +68,9 @@ jobs:
           php artisan config:clear
           php artisan cache:clear
           php artisan key:generate
-          php artisan serve
+      - name: Run migrations
+        working-directory: fireX
+        run: php artisan migrate --force
 
     
 
