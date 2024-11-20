@@ -57,8 +57,8 @@ jobs:
           cd fireX  # Ensure we are in the correct directory
 
           # Get the container ID for the 'db' and 'web' services using 'docker-compose ps'
-          DB_CONTAINER=$(docker-compose ps -q db)  # MySQL container
-          APP_CONTAINER=$(docker-compose ps -q web)  # App container
+          DB_CONTAINER=$(docker compose ps -q db)  # MySQL container
+          APP_CONTAINER=$(docker compose ps -q web)  # App container
 
           # Output the container IDs for verification
           echo "DB Container ID: $DB_CONTAINER"
