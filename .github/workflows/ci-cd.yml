@@ -49,8 +49,16 @@ jobs:
             echo "Waiting for MySQL...";
             sleep 5;
           done
-      # Run Laravel Artisan commands
+      - name: Get container names dynamically
+        run: |
+          # Get the container ID for the 'db' and 'app' services
+          DB_CONTAINER=$(docker-compose ps -q db)
+          APP_CONTAINER=$(docker-compose ps -q app)
+          echo "DB Container ID: $DB_CONTAINER"
+          echo "App Container ID: $APP_CONTAINER"
+
+      # Run Laravel Artisan commands using the dynamically obtained container names
       - name: Run Artisan Commands
         run: |
-          docker exec firex-app php artisan migrate --force
-          docker exec firex-app php artisan test
+          docker exec $APP_CONTAINER php artisan migrate --force
+          docker exec $APP_CONTAINER php artisan test
