@@ -13,8 +13,7 @@ services:
       - .:/var/www/html
     depends_on:
       - db
-    networks:
-      - app-network
+    
   
   db:
     platform: "linux/amd64"
@@ -28,8 +27,7 @@ services:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
-    networks:
-      - app-network
+
 
 volumes:
   dbdata:
