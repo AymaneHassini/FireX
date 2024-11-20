@@ -85,12 +85,7 @@ jobs:
           # Fetch the container IDs (use this for debugging)
           APP_CONTAINER=$(docker compose ps -q web)
           DB_CONTAINER=$(docker compose ps -q db)
-          echo $DB_HOST
-          echo $DB_PORT
-          echo $DB_USERNAME
-          echo $DB_PASSWORD
-
-       
+        
           # Run the Laravel Artisan commands on the app container
           docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
           docker exec "$APP_CONTAINER" sh -c "php artisan test"
