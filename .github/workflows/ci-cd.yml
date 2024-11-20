@@ -67,6 +67,6 @@ jobs:
           # Check if the container ID is being correctly set
           echo "Running Artisan commands on $APP_CONTAINER container..."
           # Ensure the correct container is used for Artisan commands
-          docker exec -T $APP_CONTAINER php artisan migrate --force
-          docker exec -T $APP_CONTAINER php artisan test
+          docker exec  $APP_CONTAINER php artisan migrate --force
+          docker exec  $APP_CONTAINER php artisan test
 
