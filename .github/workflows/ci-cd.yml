@@ -33,7 +33,7 @@ jobs:
       # Set up Docker Compose
       - name: Set up Docker Compose
         run: |
-          cd ../fireX 
+          cd fireX 
           docker compose up -d --build
       # Wait for MySQL to be ready
       - name: Wait for MySQL
