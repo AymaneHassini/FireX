@@ -80,34 +80,25 @@ jobs:
       - name: Deploy to DigitalOcean
         env:
           DO_SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+          DO_SSH_PASSPHRASE: ${{ secrets.DO_SSH_PASSPHRASE }}  # Add passphrase to GitHub Secrets
         run: |
-          # Set up SSH agent and add the private key from GitHub secrets
+          # Set up SSH agent
           mkdir -p ~/.ssh
           echo "$DO_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H 159.203.139.164 >> ~/.ssh/known_hosts
 
-          # Connect to your droplet and deploy
+          # Start ssh-agent and add the key with the passphrase
+          eval $(ssh-agent -s)
+          echo "$DO_SSH_PASSPHRASE" | ssh-add ~/.ssh/id_rsa
+
+          # Now use SSH to connect and deploy
           ssh root@159.203.139.164 << 'EOF'
             cd /var/www/fireX
-
-            # Ensure all files are pulled and up-to-date
             git pull origin main
-
-            # Install/update Composer dependencies
-            composer install --prefer-dist --no-interaction --optimize-autoloader
-
-            # Run migrations
+            composer install --prefer-dist --no-interaction
             php artisan migrate --force
-
-            # Ensure the correct file permissions
-            chown -R www-data:www-data /var/www/fireX
-            chmod -R 775 /var/www/fireX/storage /var/www/fireX/bootstrap/cache
-
-            # Install Node.js dependencies and build assets
             npm install
             npm run production
-
-            # Restart any necessary services (e.g., queue workers)
             php artisan queue:restart
           EOF
