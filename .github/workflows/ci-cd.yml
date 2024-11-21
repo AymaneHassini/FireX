@@ -59,6 +59,7 @@ jobs:
 
       # Run database migrations
       - name: Run database migrations
+        cd fireX
         run: php artisan migrate --force
 
       # Install Node.js dependencies and build assets
