@@ -1,6 +1,5 @@
 name: CI/CD Pipeline
 
-
 on:
   push:
     branches:
@@ -36,14 +35,14 @@ jobs:
           ini-values: post_max_size=256M, max_execution_time=300
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: vendor
           key: composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: composer-
 
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --no-interaction --prefer-dist
 
       - name: Setup .env file
         run: |
