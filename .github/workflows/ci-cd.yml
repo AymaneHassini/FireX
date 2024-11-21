@@ -75,3 +75,25 @@ jobs:
         run: |
           cd fireX  # Navigate to the directory containing artisan
           php artisan test
+          
+      # Deploy to DigitalOcean
+      - name: Deploy to DigitalOcean
+        env:
+          DO_SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+        run: |
+          # Set up SSH agent and add the private key from GitHub secrets
+          mkdir -p ~/.ssh
+          echo "$DO_SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 159.203.139.164 >> ~/.ssh/known_hosts
+
+          # Connect to your droplet and deploy
+          ssh root@159.203.139.164 << 'EOF'
+            cd /path/to/your/app
+            git pull origin main
+            composer install --prefer-dist --no-interaction
+            php artisan migrate --force
+            npm install
+            npm run build
+            # Add any other deployment steps you need
+          EOF
