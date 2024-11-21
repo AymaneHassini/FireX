@@ -94,7 +94,7 @@ jobs:
 
           # Now use SSH to connect and deploy
           ssh root@138.197.40.244 << 'EOF'
-            cd /var/www/fireX
+            cd /var/www/FireX/fireX
             git pull origin main
             composer install --prefer-dist --no-interaction
             php artisan migrate --force
