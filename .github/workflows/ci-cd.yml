@@ -24,9 +24,11 @@ jobs:
           - 3306:3306
         
     steps:
+      # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Setup PHP
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -34,6 +36,7 @@ jobs:
           extensions: mbstring, pdo_mysql, bcmath
           ini-values: post_max_size=256M, max_execution_time=300
 
+      # Cache Composer dependencies
       - name: Cache Composer dependencies
         uses: actions/cache@v3
         with:
@@ -41,19 +44,26 @@ jobs:
           key: composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: composer-
 
+      # Install Composer dependencies
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: |
+          cd fireX  # Make sure to navigate to the directory containing composer.json
+          composer install --prefer-dist --no-interaction
 
+      # Setup .env file
       - name: Setup .env file
         run: |
           cd fireX
-          cp fireX/.env.example fireX/.env
+          cp .env.example .env
           php artisan key:generate
 
+      # Run database migrations
       - name: Run database migrations
         run: php artisan migrate --force
 
+      # Install Node.js dependencies and build assets
       - name: Install Node.js dependencies
         run: |
+          cd fireX
           npm install
           npm run build
