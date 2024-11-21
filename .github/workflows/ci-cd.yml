@@ -31,7 +31,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '9.0'
+          php-version: '8.3'
           extensions: mbstring, pdo_mysql, bcmath
           ini-values: post_max_size=256M, max_execution_time=300
 
