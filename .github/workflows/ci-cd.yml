@@ -5,67 +5,90 @@ on:
     branches:
       - main
       - feature/*
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  laravel-tests:
+  build:
     runs-on: ubuntu-latest
 
     services:
       mysql:
         image: mysql:9.0
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}  
           MYSQL_DATABASE: laravel_db
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }} 
         ports:
-          - 3306:3306
-        
+          - 3307:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     steps:
       # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Setup PHP
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: mbstring, pdo_mysql, bcmath
-          ini-values: post_max_size=256M, max_execution_time=300
+      - name: Copy .env.example to .env
+        run: cp fireX/.env.example fireX/.env
 
-      # Cache Composer dependencies
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: composer-
-
-      # Install Composer dependencies
-      - name: Install Composer dependencies
+      # Set up Docker Compose
+      - name: Set up Docker Compose
         run: |
-          cd fireX  # Make sure to navigate to the directory containing composer.json
-          composer install --prefer-dist --no-interaction
+          cd fireX 
+          docker compose up -d --build
+      # Wait for MySQL to be ready
+      - name: Wait for MySQL
+        run: |
+          for i in {1..10}; do
+            if docker exec firex-db mysqladmin ping -h"db" --silent; then
+              echo "MySQL is ready!";
+              break;
+            fi
+            echo "Waiting for MySQL...";
+            sleep 5;
+          done
 
-      # Setup .env file
-      - name: Setup .env file
+      # Get container IDs dynamically
+      - name: Get container IDs dynamically
+        run: |
+          # Navigate to the app directory (assuming your Docker Compose file is there)
+          cd fireX  # Ensure we are in the correct directory
+
+          # Get the container ID for the 'db' and 'web' services using 'docker-compose ps'
+          DB_CONTAINER=$(docker compose ps -q db)  # MySQL container
+          APP_CONTAINER=$(docker compose ps -q web)  # App container
+
+          # Output the container IDs for verification
+          echo "DB Container ID: $DB_CONTAINER"
+          echo "App Container ID: $APP_CONTAINER"
+
+          # Store the container IDs as environment variables for later steps
+          echo "DB_CONTAINER=$DB_CONTAINER" >> $GITHUB_ENV
+          echo "APP_CONTAINER=$APP_CONTAINER" >> $GITHUB_ENV
+      # Install Composer dependencies inside the container
+      - name: Install Composer dependencies inside the container
+        run: |
+          # Ensure we are in the correct directory
+          cd fireX  # Navigate to the directory containing the Docker Compose file
+
+          # Install Laravel dependencies inside the 'web' container (app container)
+          echo "Installing Composer dependencies inside the app container ($APP_CONTAINER)..."
+          docker exec "$APP_CONTAINER" sh -c "composer install --no-interaction"
+      - name: Wait for MySQL
+        run: |
+          for i in {1..10}; do
+            if docker exec firex-db-1 mysqladmin ping -h"db" --silent; then
+              echo "MySQL is ready!";
+              break;
+            fi
+            echo "Waiting for MySQL...";
+            sleep 5;
+          done
+
+      # Run Artisan Commands
+      - name: Run Artisan Commands
         run: |
           cd fireX
-          cp .env.example .env
-          php artisan key:generate
-
-      # Run database migrations
-      - name: Run database migrations
-        run: |
-          cd fireX  # Navigate to the directory containing artisan
-          php artisan migrate --force
-
-      # Install Node.js dependencies and build assets
-      - name: Install Node.js dependencies
-        run: |
-          cd fireX
-          npm install
-          npm run build
+          echo "Running Artisan commands on container $APP_CONTAINER..."
+          docker exec "$APP_CONTAINER" sh -c "php artisan migrate --force"
+          docker exec "$APP_CONTAINER" sh -c "php artisan test"
