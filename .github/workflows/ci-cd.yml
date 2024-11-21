@@ -79,7 +79,7 @@ jobs:
       # Deploy to DigitalOcean
       - name: Deploy to DigitalOcean
         env:
-        DO_SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+          DO_SSH_PRIVATE_KEY: ${{ secrets.DO_SSH_PRIVATE_KEY }}
         run: |
           # Set up SSH agent and add the private key from GitHub secrets
           mkdir -p ~/.ssh
