@@ -53,7 +53,7 @@
                                                 <a href="#aboutUs">About us</a>
                                             </li>
                                             <li class="dropdown">
-                                                <a href="index.html">Login</a>
+                                            <a href="{{ route('login') }}">Login</a>
                                             </li>
                                         </ul>
                                     </div>
