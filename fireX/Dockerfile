@@ -1,47 +1,41 @@
-# Using PHP with Apache as the base image
-FROM php:8.3-apache as web
+# Use PHP with Apache as the base image
+FROM php:8.3-apache
 
-# Installing Additional System Dependencies
+# Install Additional System Dependencies and PHP Extensions
 RUN apt-get update && apt-get install -y \
     libzip-dev \
-    zip
+    zip \
+ && docker-php-ext-install pdo_mysql zip \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Clearing cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Enabling Apache mod_rewrite for URL rewriting
+# Enable Apache mod_rewrite for URL rewriting
 RUN a2enmod rewrite
 
-# Setting ServerName to suppress warnings
+# Set ServerName to suppress warnings
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Installing PHP extensions
-RUN docker-php-ext-install pdo_mysql zip
-
-# Configuring Apache DocumentRoot to point to Laravel's public directory
+# Configure Apache DocumentRoot to point to Laravel's public directory
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+ && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Setting the working directory
+# Set the working directory
 WORKDIR /var/www/html
 
-# Copying the application code
+# Copy the application code
 COPY . /var/www/html
 
-# **Removed the line that copies .env.docker into the image**
-
-# Installing Composer
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Installing project dependencies
+# Install project dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Setting permissions for storage and bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Set permissions for storage, bootstrap/cache, and vendor directories
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/vendor
 
-# Exposing port 80
+# Expose port 80
 EXPOSE 80
 
-# Starting Apache in the foreground
+# Start Apache in the foreground
 CMD ["apache2-foreground"]
