@@ -5,26 +5,24 @@ services:
     build:
       target: web
       context: .
-   # env_file:
-    #  - .env
     ports:
       - "8000:80"
     volumes:
       - .:/var/www/html
+      - /var/www/html/.env
     depends_on:
       - db
-  
+
   db:
     platform: "linux/amd64"
-    image: mysql:9.0
+    image: mysql:8.0  # Changed to a valid MySQL version
     env_file:
-      - .env
+      - .env.db
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}  
-      MYSQL_PASSWORD: ${DB_PASSWORD}  
-      
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
