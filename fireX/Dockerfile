@@ -29,19 +29,13 @@ WORKDIR /var/www/html
 # Copying the application code
 COPY . /var/www/html
 
-# **Copying the Docker-specific .env file into the container**
-COPY .env.docker /var/www/html/.env
+# **Removed the line that copies .env.docker into the image**
 
 # Installing Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Installing project dependencies
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
-# Generating Laravel application key (if not set)
-RUN if [ -z "$APP_KEY" ]; then \
-    php artisan key:generate; \
-    fi
 
 # Setting permissions for storage and bootstrap/cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
