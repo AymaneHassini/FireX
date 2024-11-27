@@ -18,3 +18,4 @@ yarn-error.log
 /.vscode
 .env.docker
 .env.db
+/storage/logs/*.log
