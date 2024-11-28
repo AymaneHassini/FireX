@@ -58,8 +58,6 @@
                     </form>
                 </li>
 
-
-
                     </ul>
                    
                     <!-- LOGO -->
@@ -341,8 +339,7 @@
                         
                         <!-- Google Maps Script -->
                         <script
-                            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBr7os8QQW6KX5cmM_YR8cURtEJAnH-FAg"
-                            defer
+                        src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}" defer
                         ></script>
                         <script>
                             function initMap() {
