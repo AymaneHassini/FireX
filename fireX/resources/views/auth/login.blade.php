@@ -1,47 +1,110 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Login Page | FireX</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="{{ asset('backend/assets/images/yzk.jpg') }}">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    <!-- Bootstrap CSS -->
+    <link href="{{ asset('backend/assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Custom App CSS -->
+    <link href="{{ asset('backend/assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
+    <!-- Icons -->
+    <link href="{{ asset('backend/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <script src="{{ asset('backend/assets/js/head.js') }}"></script>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+    <style>
+        .btn-primary {
+            background-color: #D50000;
+            border-color: #D50000;
+        }
+        .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+            background-color: #B40000;
+            border-color: #B40000;
+        }
+        .form-check-input:checked {
+            background-color: #D50000;
+            border-color: #D50000;
+        }
+        .authentication-bg {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+
+<body class="authentication-bg authentication-bg-pattern">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-4">
+                <div class="card bg-pattern">
+                    <div class="card-body p-4">
+                        <div class="text-center w-75 m-auto">
+                            <div class="auth-logo">
+                                <a href="/" class="logo logo-dark text-center">
+                                    <span class="logo-lg">
+                                        <img src="{{ asset('backend/assets/images/yzk-logo.jpg') }}" alt="Logo" height="50">
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <form method="POST" action="{{ route('login') }}">
+                            @csrf
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input id="email" name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" required autofocus placeholder="Enter your email">
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input id="password" name="password" type="password" class="form-control @error('password') is-invalid @enderror" required placeholder="Enter your password">
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <!-- Remember Me -->
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input id="checkbox-signin" type="checkbox" class="form-check-input" name="remember">
+                                    <label class="form-check-label" for="checkbox-signin">Remember me</label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center d-grid">
+                                <button class="btn btn-primary" type="submit">Log In</button>
+                            </div>
+
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <footer class="footer footer-alt">
+        &copy; <script>document.write(new Date().getFullYear());</script> FireX - <a href="#" class="text-white-50">Agile Software Engineering and DevOps</a>
+    </footer>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+    <script src="{{ asset('backend/assets/js/vendor.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/app.min.js') }}"></script>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</body>
+</html>
