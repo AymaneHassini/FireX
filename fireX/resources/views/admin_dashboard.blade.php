@@ -62,7 +62,7 @@
                    
                     <!-- LOGO -->
                     <div class="logo-box">
-                        <a href="index.html" class="logo logo-dark text-center">
+                        <a href="/dashboard"  class="logo logo-dark text-center">
                             <span class="logo-sm">
                                 <img src="backend/assets/images/logo-sm.png" alt="" height="22">
                             </span>
@@ -70,13 +70,11 @@
                                 <img src="backend/assets/images/firex-logo-vector.png" alt="" height="20">
                             </span>
                         </a>
-                        <a href="index.html" class="logo logo-light text-center">
+                        <a href="/dashboard"  class="logo logo-light text-center">
                             <span class="logo-sm">
                                 <img src="backend/assets/images/logo-sm.png" alt="" height="22">
                             </span>
-                            <span class="logo-lg">
-                                <img src="backend/assets/images/logo-light.png" alt="" height="20">
-                            </span>
+            
                         </a>
                     </div>
                     <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
@@ -111,30 +109,27 @@
                         <ul id="side-menu">
                             <li class="menu-title">Navigation</li>
                             <li>
-                                <a href="">
+                                <a href="{{ route('dashboard') }}">
                                     <i class="mdi mdi-view-dashboard-outline"></i>
                                     <span> Dashboard</span>
                                 </a>
-                              
                             </li>
                             <li class="menu-title mt-2">Features</li>
                             <li>
-                                <a href="">
+                                <a href="{{ route('live.feeds') }}" class="{{ request()->routeIs('live.feeds') ? 'active' : '' }}">
                                     <span class="mdi mdi-cctv"></span>
-
                                     <span> Live Feeds</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="">
+                                <a href="{{ route('map') }}" class="{{ request()->routeIs('map') ? 'active' : '' }}">
                                     <span class="mdi mdi-map"></span>
-
                                     <span> Feeds in Map</span>
                                 </a>
                             </li>
-                          
                         </ul>
                     </div>
+
                     <!-- End Sidebar -->
                     <div class="clearfix"></div>
                 </div>
@@ -154,10 +149,9 @@
                                 <div class="page-title-box">
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item">
-                                                <a href="javascript: void(0);">FireX</a>
-                                            </li>
-                                            <li class="breadcrumb-item active">Dashboard</li>
+                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">FireX</a></li>
+
+                                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Live Feeds</a></li>
                                         </ol>
                                     </div>
                                     <h4 class="page-title">Dashboard</h4>
@@ -247,7 +241,7 @@
                                             </div>
                                             <div class="col">
                                                 <h5 class="mb-1 mt-2 font-16">Ms. Samira Alami</h5>
-                                                <p class="mb-2 text-muted font-13">Chief Wildlife Officer </p>
+                                                <p class="mb-2 text-muted font-13">Chief Wildlife & Waters Officer </p>
                                                 <p class="mb-0  font-12">
                                                     <b>
                                                     Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>   
@@ -273,7 +267,7 @@
                                             </div>
                                             <div class="col">
                                                 <h5 class="mb-1 mt-2 font-16">Mr. Adam Bouji</h5>
-                                                <p class="mb-2 text-muted font-13">Patrol Leader</p>
+                                                <p class="mb-2 text-muted font-13">Forests Chief Patrol Leader</p>
                                                 <p class="mb-0  font-12">
                                                     <b>
                                                     Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>   
@@ -354,7 +348,7 @@
                                 const markers = [
                                     { position: { lat: 33.535586, lng: -5.09332 }, title: "Camera 1" },
                                     { position: { lat: 33.539, lng: -5.09 }, title: "Camera 2" },
-                                    { position: { lat: 33.529, lng: -5.11 }, title: "Camera 3" },
+                                    { position: { lat: 33.529, lng: -5.11 }, title: "Camera 3" },é
                                 ];
                         
                                 markers.forEach(({ position, title }) => {

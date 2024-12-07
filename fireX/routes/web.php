@@ -27,5 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
+Route::get('/live-feeds', function () {
+    return view('live_feed');
+})->name('live.feeds');
+Route::get('/maps', function () {
+    return view('map');
+})->name('map');
 require __DIR__.'/auth.php';
