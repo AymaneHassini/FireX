@@ -160,46 +160,59 @@
                         </div>
                         <!-- end page title -->
                         <div class="row">
-                            <div class="col-md-6 col-xl-3" style="display: flex; justify-content: center; align-items: center;">
-                                <div class="card" id="tooltip-container" style="width: 300px; height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                                    <div class="card-body" style="text-align: center;">
-                                        <h4 class="mt-0 font-16">Active Cameras</h4>
-                                        <h2 class="text-primary my-3 text-center">
+                        <div class="col-md-6 col-xl-3 d-flex justify-content-center align-items-center">
+                            <div class="card" id="tooltip-container" 
+                                style="width: 400px; height: 200px; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
+                                    <h4 class="mt-0 font-20">Active Cameras</h4>
+                                    <div class="d-flex justify-content-center align-items-center" style="flex: 1;">
+                                        <h2 class="text-primary my-3 m-0" style="font-size: 80px;">
                                             <span data-plugin="counterup">0</span>
                                         </h2>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3" style="display: flex; justify-content: center; align-items: center;">
-                                <div class="card" id="tooltip-container1" style="width: 300px; height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                                    <div class="card-body" style="text-align: center;">
-                                        <h4 class="mt-0 font-16">Number of Alerts</h4>
-                                        <h2 class="text-primary my-3 text-center">
+                        </div>
+
+                        <div class="col-md-6 col-xl-3 d-flex justify-content-center align-items-center">
+                            <div class="card" id="tooltip-container" 
+                                style="width: 400px; height: 200px; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
+                                    <h4 class="mt-0 font-20">Number of Alerts</h4>
+                                    <div class="d-flex justify-content-center align-items-center" style="flex: 1;">
+                                        <h2 class="text-primary my-3 m-0" style="font-size: 80px;">
                                             <span data-plugin="counterup">0</span>
                                         </h2>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3" style="display: flex; justify-content: center; align-items: center;">
-                                <div class="card" id="tooltip-container2" style="width: 300px; height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                                    <div class="card-body" style="text-align: center;">
-                                        <h4 class="mt-0 font-16">Number of Notifications</h4>
-                                        <h2 class="text-primary my-3 text-center">
+                        </div>
+                        <div class="col-md-6 col-xl-3 d-flex justify-content-center align-items-center">
+                            <div class="card" id="tooltip-container" 
+                                style="width: 400px; height: 200px; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
+                                    <h4 class="mt-0 font-20">Number of False Positives</h4>
+                                    <div class="d-flex justify-content-center align-items-center" style="flex: 1;">
+                                        <h2 class="text-primary my-3 m-0" style="font-size: 80px;">
                                             <span data-plugin="counterup">0</span>
                                         </h2>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xl-3" style="display: flex; justify-content: center; align-items: center;">
-                                <div class="card" id="tooltip-container3" style="width: 300px; height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                                    <div class="card-body" style="text-align: center;">
-                                        <h4 class="mt-0 font-16">Number of False Positives</h4>
-                                        <h2 class="text-primary my-3 text-center">
+                        </div>
+                        <div class="col-md-6 col-xl-3 d-flex justify-content-center align-items-center">
+                            <div class="card" id="tooltip-container" 
+                                style="width: 400px; height: 200px; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                <div class="card-body d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
+                                    <h1 class="mt-0 font-20">Number of Notifications</h1>
+                                    <div class="d-flex justify-content-center align-items-center" style="flex: 1;">
+                                        <h2 class="text-primary my-3 m-0" style="font-size: 80px; color:#f44336">
                                             <span data-plugin="counterup">0</span>
                                         </h2>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                                                      
                         </div>
                         <!-- end row -->
@@ -335,34 +348,40 @@
                         <script
                         src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}" defer
                         ></script>
+                        <script src="backend/assets/libs/gmaps/gmaps.min.js" defer></script>
+                        <script src="backend/assets/js/pages/google-maps.init.js"></script>
                         <script>
-                            function initMap() {
-                                // Initialize map centered at a specific location
-                                const centerPosition = { lat: 33.535586, lng: -5.09332 };
-                                const map = new google.maps.Map(document.getElementById("map"), {
-                                    zoom: 12,
-                                    center: centerPosition,
-                                });
-                        
-                                // Add dynamic markers
-                                const markers = [
-                                    { position: { lat: 33.535586, lng: -5.09332 }, title: "Camera 1" },
-                                    { position: { lat: 33.539, lng: -5.09 }, title: "Camera 2" },
-                                    { position: { lat: 33.529, lng: -5.11 }, title: "Camera 3" },é
-                                ];
-                        
-                                markers.forEach(({ position, title }) => {
-                                    new google.maps.Marker({
-                                        position,
-                                        map,
-                                        title,
+                            document.addEventListener('DOMContentLoaded', function () {
+                            // Initialize the map
+                            var map = new GMaps({
+                                el: '#map',
+                                lat: 33.4817352473167, // Center latitude
+                                lng: -5.1447216303132794, // Center longitude
+                                zoom: 12 // Adjust zoom level as needed
+                            });
+
+                            // Retrieve all feed data from localStorage
+                            Object.keys(localStorage).forEach((key) => {
+                                const feedDetails = JSON.parse(localStorage.getItem(key));
+
+                                if (feedDetails && feedDetails.lat && feedDetails.lng) {
+                                    map.addMarker({
+                                        lat: parseFloat(feedDetails.lat),
+                                        lng: parseFloat(feedDetails.lng),
+                                        title: feedDetails.title || 'Custom Marker',
+                                        icon: {
+                                            url: '/backend/assets/libs/iconsvg/cctv.svg',
+                                            scaledSize: new google.maps.Size(40, 40) // Adjust size
+                                        },
+                                        infoWindow: {
+                                            content: `<p>${feedDetails.title || 'Feed'}</p>` // Customize content
+                                        }
                                     });
-                                });
-                            }
-                        
-                            // Initialize the map once the page is fully loaded
-                            window.onload = initMap;
-                        </script>
+                                }
+                            });
+                        });
+
+</script>
                         
                     <!-- container -->
                 </div>
@@ -413,5 +432,5 @@
         <script src="backend/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
         <script src="backend/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
         <script src="backend/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
-    </body>
+    </body> 
 </html>

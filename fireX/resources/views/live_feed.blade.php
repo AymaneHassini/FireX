@@ -199,7 +199,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <script>
                         function initializeFeed(feedId) {
                                 const container = document.querySelector(`.feed-container[data-feed-id="${feedId}"]`);
@@ -304,17 +304,114 @@
                                 container.appendChild(addFeedBox);
 
                                 // Event listeners for add-feed box
-                                addFeedBox.addEventListener("click", () => {
-                                    const ip = prompt("Enter IP Address (e.g., 10.121.33.102):");
-                                    if (ip) {
-                                        const fullUrl = `http://${ip}:8080/video`;
-                                        iframe.src = fullUrl;
-                                        iframe.style.display = "block";
-                                        addFeedBox.style.display = "none";
-                                        resetBtn.style.display = "inline-block";
-                                        localStorage.setItem(feedId, fullUrl);
-                                    }
+                                // Function to validate IP address format
+                            function isValidIP(ip) {
+                                const ipPattern = /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
+                                return ipPattern.test(ip);
+                            }
+
+                            // Utility to check feed availability with retries
+                            function checkFeedAvailability(url, retries = 3, delay = 2000) {
+                                return new Promise((resolve, reject) => {
+                                    const attempt = (count) => {
+                                        fetch(url)
+                                            .then((response) => {
+                                                if (response.ok) {
+                                                    resolve(); // Feed is available
+                                                } else {
+                                                    throw new Error(`HTTP Error: ${response.status}`);
+                                                }
+                                            })
+                                            .catch((error) => {
+                                                if (count > 0) {
+                                                    setTimeout(() => attempt(count - 1), delay);
+                                                } else {
+                                                    reject(new Error("Feed is unavailable after multiple retries."));
+                                                }
+                                            });
+                                    };
+
+                                    attempt(retries);
                                 });
+                            }
+
+                            // Restore feed state dynamically
+                            function restoreFeed() {
+                                const savedFeed = localStorage.getItem(feedId);
+
+                                if (savedFeed) {
+                                    try {
+                                        const feedData = JSON.parse(savedFeed);
+
+                                        if (feedData.url) {
+                                            checkFeedAvailability(feedData.url)
+                                                .then(() => {
+                                                    iframe.src = feedData.url;
+                                                    iframe.style.display = "block";
+                                                    addFeedBox.style.display = "none";
+                                                    resetBtn.style.display = "inline-block";
+                                                    console.log("Feed restored:", feedData);
+                                                })
+                                                .catch((error) => {
+                                                    console.error("Failed to restore feed:", error.message);
+                                                    alert("Previously saved feed is unavailable.");
+                                                    localStorage.removeItem(feedId); // Clean up invalid feed
+                                                });
+                                        }
+                                    } catch (e) {
+                                        console.error("Failed to parse saved feed data:", e);
+                                    }
+                                }
+                            }
+
+                            // Event listener for adding a feed
+                            addFeedBox.addEventListener("click", () => {
+                                const ip = prompt("Enter IP Address (e.g., 10.121.33.102):");
+
+                                if (ip && isValidIP(ip)) {
+                                    const latitude = prompt("Enter Latitude:");
+                                    const longitude = prompt("Enter Longitude:");
+
+                                    if (latitude && longitude) {
+                                        const fullUrl = `http://${ip}:8080/video`;
+
+                                        // Check if the feed URL is available before displaying it
+                                        checkFeedAvailability(fullUrl)
+                                            .then(() => {
+                                                iframe.src = fullUrl;
+                                                iframe.style.display = "block";
+                                                addFeedBox.style.display = "none";
+                                                resetBtn.style.display = "inline-block";
+
+                                                // Save feed details
+                                                try {
+                                                    const feedDetails = {
+                                                        url: fullUrl,
+                                                        lat: parseFloat(latitude),
+                                                        lng: parseFloat(longitude),
+                                                        timestamp: Date.now()
+                                                    };
+                                                    localStorage.setItem(feedId, JSON.stringify(feedDetails));
+                                                    console.log("Feed saved:", feedDetails);
+                                                } catch (e) {
+                                                    console.error("Failed to save feed details:", e);
+                                                }
+                                            })
+                                            .catch((error) => {
+                                                alert(`Failed to load feed: ${error.message}`);
+                                            });
+                                    } else {
+                                        alert("Latitude and Longitude are required!");
+                                    }
+                                } else {
+                                    alert("Invalid IP Address! Please try again.");
+                                }
+                            });
+
+                            // Restore feed state on page load
+                            document.addEventListener("DOMContentLoaded", restoreFeed);
+
+                            window.addEventListener("popstate", restoreFeed);
 
                                 // Reset button functionality
                                 resetBtn.addEventListener("click", () => {
@@ -475,6 +572,8 @@
 
 
                 </script>
+
+
 
                 <!-- Footer Start -->
                 <footer class="footer">
