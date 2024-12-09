@@ -150,7 +150,7 @@
                                     <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">FireX</a></li>
-                                            <li class="breadcrumb-item"><a href="{{ route('map') }}">Feeds in Map</a></li>
+                                            <li class="breadcrumb-item"><a href="{{ route('map') }}">Feeds in</a></li>
                                         </ol>
                                     </div>
                                     <h4 class="page-title">Live Feeds</h4>
@@ -210,7 +210,7 @@
         <div class="rightbar-overlay"></div>
 
         <!-- Vendor js -->
-        <script src="backend/assets/js/vendor.min.js"></script>
+        <script src="backend/assets/js/vendor.min.js" defer></script>
 
         <!-- google maps api -->
         <script
@@ -221,6 +221,43 @@
 
         <!-- Init js-->
         <script src="backend/assets/js/pages/google-maps.init.js"></script>
+        <!-- GMaps Library -->
+<script src="backend/assets/libs/gmaps/gmaps.min.js" defer></script>
+
+<!-- Map Initialization -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Initialize the map
+    var map = new GMaps({
+        el: '#gmaps-basic',
+        lat: 33.4817352473167, // Center latitude
+        lng: -5.1447216303132794, // Center longitude
+        zoom: 12 // Adjust zoom level as needed
+    });
+
+    // Retrieve all feed data from localStorage
+    Object.keys(localStorage).forEach((key) => {
+        const feedDetails = JSON.parse(localStorage.getItem(key));
+
+        if (feedDetails && feedDetails.lat && feedDetails.lng) {
+            map.addMarker({
+                lat: parseFloat(feedDetails.lat),
+                lng: parseFloat(feedDetails.lng),
+                title: feedDetails.title || 'Custom Marker',
+                icon: {
+                    url: '/backend/assets/libs/iconsvg/cctv.svg',
+                    scaledSize: new google.maps.Size(40, 40) // Adjust size
+                },
+                infoWindow: {
+                    content: `<p>${feedDetails.title || 'Feed'}</p>` // Customize content
+                }
+            });
+        }
+    });
+});
+
+</script>
+
 
         <!-- App js -->
         <script src="backend/assets/js/app.min.js"></script>
