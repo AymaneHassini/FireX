@@ -47,7 +47,7 @@
                                 <i class="fe-maximize noti-icon"></i>
                             </a>
                         </li>
-                
+
                         <li class="topbar-item">
                     <form method="POST" action="{{ route('logout') }}" class="d-inline">
                         @csrf
@@ -59,7 +59,7 @@
                 </li>
 
                     </ul>
-                   
+
                     <!-- LOGO -->
                     <div class="logo-box">
                         <a href="/dashboard"  class="logo logo-dark text-center">
@@ -74,7 +74,7 @@
                             <span class="logo-sm">
                                 <img src="backend/assets/images/logo-sm.png" alt="" height="22">
                             </span>
-            
+
                         </a>
                     </div>
                     <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
@@ -94,7 +94,7 @@
                             </a>
                             <!-- End mobile menu toggle-->
                         </li>
-                     
+
                     </ul>
                     <div class="clearfix"></div>
                 </div>
@@ -103,7 +103,7 @@
             <!-- ========== Left Sidebar Start ========== -->
             <div class="left-side-menu">
                 <div class="h-100" data-simplebar>
-                   
+
                     <!--- Sidemenu -->
                     <div id="sidebar-menu">
                         <ul id="side-menu">
@@ -147,10 +147,10 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <div class="page-title-right">
+                                    <div class="page-title-right d-flex align-items-center">
+                                        <button id="reset-button" class="btn btn-sm btn-primary me-3">Reset Alerts</button>
                                         <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">FireX</a></li>
-
+                                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">FireX</a></li>
                                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Live Feeds</a></li>
                                         </ol>
                                     </div>
@@ -161,7 +161,7 @@
                         <!-- end page title -->
                         <div class="row">
                         <div class="col-md-6 col-xl-3 d-flex justify-content-center align-items-center">
-                            <div class="card" id="tooltip-container" 
+                            <div class="card" id="tooltip-container"
                                 style="width: 400px; height: 200px; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
                                     <h4 class="mt-0 font-20">Active Cameras</h4>
@@ -175,20 +175,20 @@
                         </div>
 
                         <div class="col-md-6 col-xl-3 d-flex justify-content-center align-items-center">
-                            <div class="card" id="tooltip-container" 
+                            <div class="card" id="tooltip-container"
                                 style="width: 400px; height: 200px; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
                                     <h4 class="mt-0 font-20">Number of Alerts</h4>
                                     <div class="d-flex justify-content-center align-items-center" style="flex: 1;">
                                         <h2 class="text-primary my-3 m-0" style="font-size: 80px;">
-                                            <span data-plugin="counterup">0</span>
+                                            <span id="total-alerts" data-plugin="counterup">0</span>
                                         </h2>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6 col-xl-3 d-flex justify-content-center align-items-center">
-                            <div class="card" id="tooltip-container" 
+                            <div class="card" id="tooltip-container"
                                 style="width: 400px; height: 200px; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
                                     <h4 class="mt-0 font-20">Number of False Positives</h4>
@@ -201,10 +201,10 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-xl-3 d-flex justify-content-center align-items-center">
-                            <div class="card" id="tooltip-container" 
+                            <div class="card" id="tooltip-container"
                                 style="width: 400px; height: 200px; margin: 10px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center" style="text-align: center;">
-                                    <h1 class="mt-0 font-20">Number of Notifications</h1>
+                                    <h4 class="mt-0 font-20">Number of Notifications</h4>
                                     <div class="d-flex justify-content-center align-items-center" style="flex: 1;">
                                         <h2 class="text-primary my-3 m-0" style="font-size: 80px; color:#f44336">
                                             <span data-plugin="counterup">0</span>
@@ -213,7 +213,7 @@
                                 </div>
                             </div>
                         </div>
-                                                     
+
                         </div>
                         <!-- end row -->
                         <div class="row">
@@ -231,7 +231,7 @@
                                                 <p class="mb-2 text-muted font-13">Head of Forest Rangers </p>
                                                 <p class="mb-0  font-12">
                                                     <b>
-                                                    Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>   
+                                                    Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>
                                                     </b>
                                                 </p>
 
@@ -257,7 +257,7 @@
                                                 <p class="mb-2 text-muted font-13">Chief Wildlife & Waters Officer </p>
                                                 <p class="mb-0  font-12">
                                                     <b>
-                                                    Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>   
+                                                    Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>
                                                     </b>
                                                 </p>
 
@@ -283,7 +283,7 @@
                                                 <p class="mb-2 text-muted font-13">Forests Chief Patrol Leader</p>
                                                 <p class="mb-0  font-12">
                                                     <b>
-                                                    Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>   
+                                                    Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>
                                                     </b>
                                                 </p>
 
@@ -309,7 +309,7 @@
                                                 <p class="mb-2 text-muted font-13">Director of National Parks </p>
                                                 <p class="mb-0  font-12">
                                                     <b>
-                                                    Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>   
+                                                    Phone: <b> <a href="tel:+212641093261" class="text-muted">+212 641093261</a>  </b>
                                                     </b>
                                                 </p>
 
@@ -332,7 +332,7 @@
                                             <a data-bs-toggle="collapse" href="#cardCollpase4" role="button" aria-expanded="false" aria-controls="cardCollpase4"><i class="mdi mdi-minus"></i></a>
                                         </div>
                                         <h4 class="header-title mb-0">Camera's Location</h4>
-                        
+
                                         <div id="cardCollpase4" class="collapse show">
                                             <div class="pt-3">
                                                 <!-- Map Container -->
@@ -343,7 +343,7 @@
                                 </div> <!-- end card-->
                             </div> <!-- end col -->
                         </div>
-                        
+
                         <!-- Google Maps Script -->
                         <script
                         src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}" defer
@@ -382,7 +382,7 @@
                         });
 
 </script>
-                        
+
                     <!-- container -->
                 </div>
                 <!-- content -->
@@ -410,7 +410,7 @@
             <!-- ============================================================== -->
         </div>
         <!-- END wrapper -->
-       
+
         <!-- Right bar overlay-->
         <div class="rightbar-overlay"></div>
         <!-- Vendor js -->
@@ -427,10 +427,46 @@
         <script src="backend/assets/js/pages/dashboard-3.init.js"></script>
         <!-- App js-->
         <script src="backend/assets/js/app.min.js"></script>
-        
+        <script>
+               document.addEventListener('DOMContentLoaded', function () {
+            const totalAlertsElement = document.querySelector('#total-alerts');
+
+            async function fetchAlertCounts() {
+                try {
+                    const response = await fetch('/alert-counts');
+                    const data = await response.json();
+                    totalAlertsElement.textContent = data.number_of_alerts;
+                } catch (error) {
+                    console.error('Error fetching alert counts:', error);
+                }
+            }
+
+            setInterval(fetchAlertCounts, 2000);
+            fetchAlertCounts();
+
+            document.querySelector('#reset-button').addEventListener('click', async function () {
+                try {
+                    const response = await fetch('/reset-alerts', {
+                        method: 'POST',
+                        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+                    });
+                    if (response.ok) {
+                        await fetchAlertCounts();
+                    } else {
+                        console.error('Failed to reset alerts');
+                    }
+                } catch (error) {
+                    console.error('Error resetting alerts:', error);
+                }
+            });
+        });
+
+        </script>
+
+
         <!-- Plugins js-->
         <script src="backend/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
         <script src="backend/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
         <script src="backend/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
-    </body> 
+    </body>
 </html>
