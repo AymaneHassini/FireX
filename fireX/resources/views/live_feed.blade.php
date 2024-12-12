@@ -366,47 +366,51 @@
 
                             // Event listener for adding a feed
                             addFeedBox.addEventListener("click", () => {
-                                const ip = prompt("Enter IP Address (e.g., 10.121.33.102):");
+                                        const ip = prompt("Enter IP Address (e.g., 10.121.33.102):");
 
-                                if (ip && isValidIP(ip)) {
-                                    const latitude = prompt("Enter Latitude:");
-                                    const longitude = prompt("Enter Longitude:");
+                                        if (ip && isValidIP(ip)) {
+                                            const latitude = prompt("Enter Latitude:");
+                                            const longitude = prompt("Enter Longitude:");
 
-                                    if (latitude && longitude) {
-                                        const fullUrl = `http://${ip}:8080/video`;
+                                            if (latitude && longitude) {
+                                                const rawFeedUrl = `http://${ip}:8080/video`;
+                                                const processedFeedUrl = `http://localhost:5001/processed_feed?url=${encodeURIComponent(rawFeedUrl)}`;
+                                                console.log("Processed feed URL:", processedFeedUrl);
 
-                                        // Check if the feed URL is available before displaying it
-                                        checkFeedAvailability(fullUrl)
-                                            .then(() => {
-                                                iframe.src = fullUrl;
-                                                iframe.style.display = "block";
-                                                addFeedBox.style.display = "none";
-                                                resetBtn.style.display = "inline-block";
 
-                                                // Save feed details
-                                                try {
-                                                    const feedDetails = {
-                                                        url: fullUrl,
-                                                        lat: parseFloat(latitude),
-                                                        lng: parseFloat(longitude),
-                                                        timestamp: Date.now()
-                                                    };
-                                                    localStorage.setItem(feedId, JSON.stringify(feedDetails));
-                                                    console.log("Feed saved:", feedDetails);
-                                                } catch (e) {
-                                                    console.error("Failed to save feed details:", e);
-                                                }
-                                            })
-                                            .catch((error) => {
-                                                alert(`Failed to load feed: ${error.message}`);
-                                            });
-                                    } else {
-                                        alert("Latitude and Longitude are required!");
-                                    }
-                                } else {
-                                    alert("Invalid IP Address! Please try again.");
-                                }
-                            });
+                                                // Check if the processed feed URL is available before displaying it
+                                                checkFeedAvailability(processedFeedUrl)
+                                                    .then(() => {
+                                                        iframe.src = processedFeedUrl; // Use the processed YOLO feed
+                                                        iframe.style.display = "block";
+                                                        addFeedBox.style.display = "none";
+                                                        resetBtn.style.display = "inline-block";
+
+                                                        // Save feed details
+                                                        try {
+                                                            const feedDetails = {
+                                                                url: processedFeedUrl, // Save the processed feed URL
+                                                                lat: parseFloat(latitude),
+                                                                lng: parseFloat(longitude),
+                                                                timestamp: Date.now()
+                                                            };
+                                                            localStorage.setItem(feedId, JSON.stringify(feedDetails));
+                                                            console.log("Feed saved:", feedDetails);
+                                                        } catch (e) {
+                                                            console.error("Failed to save feed details:", e);
+                                                        }
+                                                    })
+                                                    .catch((error) => {
+                                                        alert(`Failed to load feed: ${error.message}`);
+                                                    });
+                                            } else {
+                                                alert("Latitude and Longitude are required!");
+                                            }
+                                        } else {
+                                            alert("Invalid IP Address! Please try again.");
+                                        }
+                                    });
+
 
                             // Restore feed state on page load
                             document.addEventListener("DOMContentLoaded", restoreFeed);

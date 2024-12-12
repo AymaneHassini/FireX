@@ -69,6 +69,25 @@ jobs:
           cd fireX
           npm install
           npm run build
+      
+      # Python: Setup and Run Tests
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Python dependencies
+        run: |
+          cd yolov9
+          pip install -r requirements.txt
+          pip install pytest pytest-mock  # Ensure pytest dependencies are available
+
+      - name: Run Python tests
+        run: |
+          cd yolov9
+          pytest tests/
+      
+      
 
       # Run tests
       - name: Run Laravel tests
