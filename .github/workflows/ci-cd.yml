@@ -78,13 +78,13 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          cd yolov9
+          cd python-service/yolov9
           pip install -r requirements.txt
           pip install pytest pytest-mock  # Ensure pytest dependencies are available
 
       - name: Run Python tests
         run: |
-          cd yolov9
+          cd python-service/yolov9
           pytest tests/
       
       
